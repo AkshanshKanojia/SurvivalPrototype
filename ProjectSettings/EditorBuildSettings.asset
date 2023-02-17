@@ -4,5 +4,8 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Akshansh/Scenes/Proto.unity
+    guid: d4c93c0bb3d576c4f91bed6a52173c61
   m_configObjects: {}
