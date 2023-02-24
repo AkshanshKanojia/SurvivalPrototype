@@ -99,6 +99,12 @@ namespace AkshanshKanojia.Animations
                 UpdateCurrentSequence();
             }
         }
+        private void OnDisable()
+        {
+            objCont.OnMovementEnd -= OnPosReached;
+            objCont.OnRotationEnd -= OnRotReached;
+            objCont.OnScaleEnd -= OnScaleReached;
+        }
         //add next sequence as target and stops/repeats it if all sequences are finished based on parameters
         void UpdateCurrentSequence()
         {

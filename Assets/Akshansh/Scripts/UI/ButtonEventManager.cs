@@ -20,11 +20,9 @@ public class ButtonEventManager : MonoBehaviour
 
     [SerializeField] TMP_InputField inp;
 
-    LobbyManager lobbyMang;
 
     private void Start()
     {
-        lobbyMang = FindObjectOfType<LobbyManager>();
         foreach(var v in CurtButtons)
         {
             v.TargetButton.OnLeft += OnTapLeft;
@@ -42,10 +40,10 @@ public class ButtonEventManager : MonoBehaviour
                     switch(_action)
                     {
                         case AvailableButtonActions.CreateRoom:
-                            lobbyMang.CreateLobby(inp.text,2);
+                            FindObjectOfType<NetworkManager>().CreateRoom(inp.text,4);
                             break;
                         case AvailableButtonActions.JoinRoom:
-                            lobbyMang.JoinLobby(inp.text);
+                            FindObjectOfType<NetworkManager>().JoinRoom(inp.text);
                             break;
                         case AvailableButtonActions.StartGame:
                             FindObjectOfType<SceneHandler>().SetScene(v.ActionValue);

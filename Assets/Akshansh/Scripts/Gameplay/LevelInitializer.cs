@@ -1,23 +1,21 @@
-using Unity.Netcode;
 using UnityEngine;
+using Photon.Pun;
+using Photon.Realtime;
 
-public class LevelInitializer : NetworkBehaviour
+public class LevelInitializer : MonoBehaviour
 {
-    LobbyManager mang;
-    [SerializeField] GameObject playerPref;
 
     private void Start()
     {
-        SetPlayers();
+        SetPlayer();
     }
 
-    void SetPlayers()
+    void SetPlayer()
     {
-        mang = FindObjectOfType<LobbyManager>();
-        print(mang.activeLobby.Players.Count);
-        foreach(var _ in mang.activeLobby.Players)
+        GameObject _temp = PhotonNetwork.Instantiate("Player",new Vector3(0,2,0),Quaternion.identity);
+        if(_temp.GetComponent<PhotonView>().IsMine)
         {
-            Instantiate(playerPref);
+            _temp.transform.GetChild(0).gameObject.SetActive(true);//camera
         }
     }
 }

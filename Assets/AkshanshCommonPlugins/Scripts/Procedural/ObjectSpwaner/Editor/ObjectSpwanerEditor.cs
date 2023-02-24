@@ -6,7 +6,7 @@ namespace AkshanshKanojia.LevelEditors
     [CustomEditor(typeof(ObjectSpwaner))]
     public class ObjectSpwanerEditor : Editor
     {
-        bool showGrid = true, showGenerationProp, showDebugProperties;
+        bool showGrid = true, showGenerationProp = true, showDebugProperties = true;
         public override void OnInspectorGUI()
         {
             DrawDefaultInspector();
@@ -37,11 +37,15 @@ namespace AkshanshKanojia.LevelEditors
                     _tempMang.AvoidObjectOverlaps = EditorGUILayout.Toggle("Try Avoiding Overlaps", _tempMang.AvoidObjectOverlaps);
                     if (_tempMang.AvoidObjectOverlaps)
                     {
-                        EditorGUILayout.HelpBox("Make sure objects you are spwaning have a collider in it " +
-                            "to detect overlapping!", MessageType.Info);
-                        _tempMang.OverlapDetectionRadius = EditorGUILayout.FloatField("Overlap Avoidance Range", _tempMang.OverlapDetectionRadius);
                         _tempMang.MaxOverlapItteration = EditorGUILayout.IntSlider("Max Avoidance itteration", _tempMang.MaxOverlapItteration, 1, 1000);
                         _tempMang.SkipOnOverlap = EditorGUILayout.Toggle("Skip On Overlap", _tempMang.SkipOnOverlap);
+                    }
+                    _tempMang.ApplyParentRotation = EditorGUILayout.Toggle("Apply Parent Rotation", _tempMang.ApplyParentRotation); 
+                    _tempMang.AdjustHeight = EditorGUILayout.Toggle("Align to Ground", _tempMang.AdjustHeight);
+                    if (_tempMang.AdjustHeight)
+                    {
+                        _tempMang.SurfaceRayDist = EditorGUILayout.FloatField("Surface Raycast Distance",_tempMang.SurfaceRayDist);
+                        _tempMang.RotateAlongNormal = EditorGUILayout.Toggle("Rotate toward surface Normal", _tempMang.RotateAlongNormal);
                     }
                     if (GUILayout.Button("Generate Objects"))
                     {

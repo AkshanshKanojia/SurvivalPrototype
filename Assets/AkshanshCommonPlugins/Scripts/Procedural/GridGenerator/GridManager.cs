@@ -8,7 +8,7 @@ namespace AkshanshKanojia.LevelEditors
         #region Serialized Fields
         [Header("Grid Properties")]
         [SerializeField] float cellSize = 1f;
-        [SerializeField]
+        [SerializeField,Range(2,10000)]
         uint xSize = 10, zSize = 10;
 
         
@@ -33,12 +33,6 @@ namespace AkshanshKanojia.LevelEditors
         {
             public Vector3 bottomLeft, topLeft, bottomRight, topRight, midPos;
             public int EntitiesInCell = 0;//assign this manually (for game need)
-            public void GetMidPoint()
-            {
-                midPos.x = (topLeft - bottomLeft).magnitude / 2;
-                midPos.z = (topLeft - bottomLeft).magnitude / 2;
-                midPos += bottomLeft;//origin of cell start from bottom left
-            }
         }
         public List<CellHolder> cells;
 
@@ -95,10 +89,20 @@ namespace AkshanshKanojia.LevelEditors
                     topRight = gridVertices[i + zSize + 1 + _zFixIndex],
                     bottomRight = gridVertices[i + zSize + _zFixIndex]
                 };
-                _temp.GetMidPoint();
                 _temp.midPos = RotatePointAroundPivot(_temp.midPos, transform.position, transform.eulerAngles);
                 cells.Add(_temp);
             }
+
+            //calculate Midpoint
+            foreach(var v in cells)
+            {
+                v.midPos = CalculateMidPoint(v.topRight, v.bottomLeft);
+            }
+        }
+
+        Vector3 CalculateMidPoint(Vector3 _top,Vector3 _bottom)
+        {
+            return _top + (_bottom - _top) / 2;
         }
 
         #endregion
@@ -157,6 +161,8 @@ namespace AkshanshKanojia.LevelEditors
 
         public void SetGridSize(int _x, int _z)
         {
+            _x = (_x < 0) ? -_x : _x;
+            _z = (_z< 0) ? -_z : _z;
             xSize = (uint)_x;
             zSize = (uint)_z;
             GenerateGrid();

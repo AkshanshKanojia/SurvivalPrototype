@@ -1,10 +1,10 @@
 using UnityEngine.SceneManagement;
-using Unity.Netcode;
+using UnityEngine;
 
-public class SceneHandler : NetworkBehaviour
+public class SceneHandler : MonoBehaviour
 {
     public void SetScene(string _scene)
     {
-        NetworkManager.SceneManager.LoadScene(_scene, LoadSceneMode.Single);
+        SceneManager.LoadScene(_scene);
     }
 }
