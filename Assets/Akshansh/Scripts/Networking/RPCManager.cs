@@ -16,13 +16,14 @@ public class RPCManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            view.RPC("TestRPC",RpcTarget.All );
+            view.RPC("TestRPC",RpcTarget.All,"bang");
         }
     }
 
     [PunRPC]
-    void TestRPC()
+    void TestRPC(string str)
     {
+        print(str);
     }
     #endregion
 }

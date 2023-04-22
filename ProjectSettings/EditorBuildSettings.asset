@@ -9,6 +9,9 @@ EditorBuildSettings:
     path: Assets/Akshansh/Scenes/MenuScene.unity
     guid: a0ede7a29f8f73341b8da93935dbbdbe
   - enabled: 1
+    path: Assets/Akshansh/Scenes/Lobby.unity
+    guid: c239957abde2f3b4f84ca8ebb041561c
+  - enabled: 1
     path: Assets/Akshansh/Scenes/PlayerTestProto.unity
     guid: 18b85ecfd75cf534d85d54010e9e1208
   m_configObjects: {}

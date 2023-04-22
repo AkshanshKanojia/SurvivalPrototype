@@ -10,8 +10,9 @@ namespace Gameplay.Player
         //serialized Fields
         [SerializeField] Transform playerCam;
         [SerializeField] bool canSprint = true;
-        [SerializeField] float moveSpeed = 2f, rotSenstivit = 3f, minMouseClamp = -40f, maxMouseClamp = 40f,sprintSpeed = 3f,
-            maxStaminaAvailable =10f,staminaConsumptionRate =1,staminaRestoreDelay = 2f,staminaRestoreRate =1;
+        [SerializeField]
+        float moveSpeed = 2f, rotSenstivit = 3f, minMouseClamp = -40f, maxMouseClamp = 40f, sprintSpeed = 3f,
+            maxStaminaAvailable = 10f, staminaConsumptionRate = 1, staminaRestoreDelay = 2f, staminaRestoreRate = 1;
         [SerializeField] Animator playerAnim;
 
         //private fields
@@ -19,7 +20,7 @@ namespace Gameplay.Player
         UIManager uiMang;
 
         float tempSpeed;//used to store default speed
-        float curntStamina,staminaRestoreTimer =0;
+        float curntStamina, staminaRestoreTimer = 0;
         bool isActivePlayer = false, canRotateCam = true;
         Vector3 tempMoveDir;
         Vector2 tempMouseRot;
@@ -31,23 +32,28 @@ namespace Gameplay.Player
             if (view.IsMine)
             {
                 isActivePlayer = true;
-                playerCam.gameObject.SetActive(true);
                 uiMang = FindObjectOfType<UIManager>();
                 uiMang.SetCursorVisibility(false);
                 tempSpeed = moveSpeed;
                 curntStamina = maxStaminaAvailable;
+            }
+            else
+            {
+                playerCam.gameObject.SetActive(false);
+                GetComponent<PlayerAttackController>().CanAttack = false;
             }
         }
 
 
         private void FixedUpdate()
         {
-            MoveInDirection(tempMoveDir);
+            if (isActivePlayer)
+                MoveInDirection(tempMoveDir);
         }
         private void Update()
         {
             InputHandler();
-            if(isActivePlayer)
+            if (isActivePlayer)
             {
                 RegenPropHandler();
             }
@@ -60,6 +66,11 @@ namespace Gameplay.Player
         {
             if (!isActivePlayer)
                 return;
+            //custom inputs
+            if (Input.GetKeyDown(KeyCode.F3))
+            {
+                uiMang.SetCursorVisibility(true);
+            }
 
             //player movement
             tempMoveDir = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));//handled by move in direction fuc
@@ -80,7 +91,7 @@ namespace Gameplay.Player
             if (_dir != Vector3.zero)//only if moving
             {
                 //sprint
-                if(Input.GetKey(KeyCode.LeftShift))
+                if (Input.GetKey(KeyCode.LeftShift))
                 {
                     if (curntStamina > 0)
                     {
@@ -94,7 +105,7 @@ namespace Gameplay.Player
                         moveSpeed = tempSpeed;
                     }
                 }
-                else if(moveSpeed==sprintSpeed)//if already sprinting
+                else if (moveSpeed == sprintSpeed)//if already sprinting
                 {
                     moveSpeed = tempSpeed;
                 }
@@ -114,13 +125,13 @@ namespace Gameplay.Player
         /// </summary>
         void RegenPropHandler()
         {
-            if(staminaRestoreTimer<staminaRestoreDelay)
+            if (staminaRestoreTimer < staminaRestoreDelay)
             {
                 staminaRestoreTimer += Time.deltaTime;
             }
             else
             {
-                if(curntStamina<maxStaminaAvailable)
+                if (curntStamina < maxStaminaAvailable)
                 {
                     curntStamina += Time.deltaTime * staminaRestoreRate;
                 }
