@@ -30,7 +30,7 @@ public class EnemyController : MonoBehaviour
     float idleSpeed = 2f, attackSpeed = 3f, atttackRange = 4f
         , sightDist = 5f, wanderRadius = 5f, minIdle = 4f, maxIdle = 6f;
     [SerializeField] bool IsActive = true;
-    [SerializeField] Transform eyePos;
+    [SerializeField] Transform[] eyePos;
 
     bool isAttacking, gettingPos = false, canAttack = true;
     NavMeshAgent agent;
@@ -145,31 +145,34 @@ public class EnemyController : MonoBehaviour
 
     void SightMang()
     {
-        if (Physics.Raycast(eyePos.position, transform.forward, out RaycastHit _hit, sightDist))
+        foreach (var v in eyePos)
         {
-            if (_hit.collider.CompareTag("Player"))
+            if (Physics.Raycast(v.position, v.transform.forward, out RaycastHit _hit, sightDist))
             {
-                isAttacking = true;
-                playerConts = FindObjectsOfType<PlayerController>();
-                agent.stoppingDistance = atttackRange;
-                agent.speed = attackSpeed;
-                curtTarget = GetNearestPlayer();
-                agent.SetDestination(curtTarget.position);
-                StartCoroutine(TrackPlayerDelayed(0));
-                switch (CurtType)
+                if (_hit.collider.CompareTag("Player"))
                 {
-                    case AvailableEnemyTypes.Mage:
-                        anim.SetBool("idle_normal", false);
-                        anim.SetBool("idle_combat", true);
+                    isAttacking = true;
+                    playerConts = FindObjectsOfType<PlayerController>();
+                    agent.stoppingDistance = atttackRange;
+                    agent.speed = attackSpeed;
+                    curtTarget = GetNearestPlayer();
+                    agent.SetDestination(curtTarget.position);
+                    StartCoroutine(TrackPlayerDelayed(0));
+                    switch (CurtType)
+                    {
+                        case AvailableEnemyTypes.Mage:
+                            anim.SetBool("idle_normal", false);
+                            anim.SetBool("idle_combat", true);
 
-                        break;
-                    default:
-                        break;
+                            break;
+                        default:
+                            break;
+                    }
                 }
             }
-        }
 
-        Debug.DrawRay(eyePos.position, transform.forward * sightDist, Color.red);
+            Debug.DrawRay(v.position, v.transform.forward * sightDist, Color.red);
+        }
     }
 
     IEnumerator SetPosDelayed(float _delay)
