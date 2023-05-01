@@ -10064,6 +10064,7 @@ GameObject:
   - component: {fileID: 1540218261164722442}
   - component: {fileID: 1540218261164722441}
   - component: {fileID: 1445222654673062698}
+  - component: {fileID: 422858289714004314}
   m_Layer: 0
   m_Name: Mage_Normal
   m_TagString: Untagged
@@ -10178,20 +10179,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CurtType: 0
   WanderCenter: {x: 0, y: 0, z: 0}
+  playerDamage: 25
+  Hp: 100
   attackPatterns:
   - AttackCD: 1.467
     AttackEffectDelay: 1.25
     AttackProjectile: {fileID: 5372921477115689149, guid: b4687fea8a4ba3d49a0a8bc92bff4753, type: 3}
     AttackSpwanPos: {fileID: 1445222654205183741}
-    BulletPrefabName: 
-    UsePunInstantiate: 0
+    BulletPrefabName: EnemyProjectile
+    UsePunInstantiate: 1
     AttackType: 0
     AttackDamage: 10
   idleSpeed: 2
   attackSpeed: 3
   atttackRange: 4
-  sightDist: 5
-  wanderRadius: 5
+  sightDist: 15
+  wanderRadius: 10
   minIdle: 4
   maxIdle: 6
   IsActive: 1
@@ -10200,6 +10203,28 @@ MonoBehaviour:
   - {fileID: 1445222654030944954}
   - {fileID: 1445222653602181428}
   anim: {fileID: 1540218261164722442}
+--- !u!114 &422858289714004314
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1445087965548798906}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &1445087965569256440
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,6 +1,5 @@
 using Photon.Pun;
 using UnityEngine;
-
 namespace Gameplay.Player
 {
     public class PlayerController : MonoBehaviour
@@ -23,7 +22,7 @@ namespace Gameplay.Player
         float curntStamina, staminaRestoreTimer = 0;
         bool isActivePlayer = false, canRotateCam = true;
         Vector3 tempMoveDir;
-        Vector2 tempMouseRot;
+        [SerializeField]Vector2 tempMouseRot;
 
         #region Private Functions
         private void Start()

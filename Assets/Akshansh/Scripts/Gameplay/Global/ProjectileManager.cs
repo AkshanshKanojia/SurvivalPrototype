@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ProjectileManager : MonoBehaviour
 {
-    public enum AvailableProjectiles { PlayerLight};
+    public enum AvailableProjectiles { PlayerLight,Enemy};
     public AvailableProjectiles ProjectileType;
     [SerializeField] float projectileSpeed = 5f, projectileDuration = 4f;
 

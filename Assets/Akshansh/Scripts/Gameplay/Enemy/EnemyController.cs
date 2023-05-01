@@ -1,14 +1,16 @@
 using Gameplay.Player;
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
-using Photon.Pun;
 public class EnemyController : MonoBehaviour
 {
     public enum AvailableEnemyTypes { Mage, Skeleton, Spider };
     public AvailableEnemyTypes CurtType;
     public Vector3 WanderCenter;
+    [SerializeField] int playerDamage = 25;
+    [SerializeField] int Hp = 100;
     public enum AvailableAttackTypes { Fireball };
 
     [System.Serializable]
@@ -37,16 +39,18 @@ public class EnemyController : MonoBehaviour
     PlayerController[] playerConts;
     [SerializeField] Animator anim;
     Transform curtTarget;
+    RPCManager rpcManager;
 
     private void Start()
     {
         agent = GetComponent<NavMeshAgent>();
         agent.speed = isAttacking ? attackSpeed : idleSpeed;
         agent.stoppingDistance = isAttacking ? atttackRange : 0.2f;
-        if(!isAttacking)
+        if (!isAttacking)
         {
             agent.SetDestination(GetRandomPos());
         }
+        rpcManager = FindObjectOfType<RPCManager>();
     }
 
     private void Update()
@@ -69,8 +73,8 @@ public class EnemyController : MonoBehaviour
         Vector3 _pos = Vector3.one;
         _pos.x = Random.Range(1, -2) * Random.Range(-wanderRadius, wanderRadius);
         _pos.z = Random.Range(1, -2) * Random.Range(-wanderRadius, wanderRadius);
-        _pos.y = transform.position.y;
-        return _pos;
+        _pos.y = 0;
+        return _pos+WanderCenter;
     }
 
     void MageMovementMang()
@@ -99,7 +103,7 @@ public class EnemyController : MonoBehaviour
         else
         {
             var _Temp = Quaternion.Slerp(Quaternion.Euler(0, transform.eulerAngles.y, 0),
-                Quaternion.LookRotation(curtTarget.position-transform.position),agent.angularSpeed*Time.deltaTime);//look at player
+                Quaternion.LookRotation(curtTarget.position - transform.position), agent.angularSpeed * Time.deltaTime);//look at player
             _Temp.x = 0; _Temp.z = 0;
             transform.rotation = _Temp;
             if (agent.remainingDistance < agent.stoppingDistance)
@@ -238,5 +242,21 @@ public class EnemyController : MonoBehaviour
             }
         }
         return playerConts[0].transform;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.GetComponent<ProjectileManager>().ProjectileType == ProjectileManager.AvailableProjectiles.PlayerLight)
+        {
+            print("enemy hurt");
+            Hp -= playerDamage;
+            if (other.GetComponent<PhotonView>().IsMine)
+                PhotonNetwork.Destroy(other.gameObject);
+            if (Hp <= 0)
+            {
+                PhotonNetwork.Destroy(gameObject);
+                print("I am dead");
+            }
+        }
     }
 }
