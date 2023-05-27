@@ -5,7 +5,7 @@ namespace Gameplay.Player
     public class PlayerController : MonoBehaviour
     {
         //handles player related events like collision and movements.
-
+        public int Hp = 100,Damage =10;
         //serialized Fields
         [SerializeField] Transform playerCam;
         [SerializeField] bool canSprint = true;
@@ -57,7 +57,27 @@ namespace Gameplay.Player
                 RegenPropHandler();
             }
         }
-
+        private void OnTriggerEnter(Collider other)
+        {
+            if(other.GetComponent<ProjectileManager>().ProjectileType == ProjectileManager.AvailableProjectiles.Enemy)
+            {
+                print("don't hurt me");
+                Hp -= Damage;
+                if(Hp<=0)
+                {
+                    PhotonNetwork.Destroy(gameObject);
+                    if(FindObjectsOfType<PlayerController>().Length==0)
+                    {
+                        PhotonNetwork.DestroyAll();
+                        Cursor.visible = true;
+                        Cursor.lockState = CursorLockMode.None;
+                        print("it is over");
+                        //game over
+                        FindObjectOfType<LevelCont>().GameOver();
+                    }
+                }
+            }
+        }
         /// <summary>
         /// Handles player inputs
         /// </summary>

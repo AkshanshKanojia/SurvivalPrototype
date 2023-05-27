@@ -1,10 +1,10 @@
 using UnityEngine;
 using System.Collections;
 using Photon.Pun;
-using Photon.Realtime;
 
 public class LevelCont : MonoBehaviour
 {
+    [SerializeField] GameObject gameoverUI;
     [SerializeField] SkyboxManager skyMang;
     [SerializeField] float CycleDuration = 0.1f;
     PhotonView ownerView;
@@ -37,6 +37,16 @@ public class LevelCont : MonoBehaviour
                 _temp.WanderCenter = groupSpwanPos[i].position;
             }
         }
+    }
+    public void GameOver()
+    {
+        gameoverUI.SetActive(true);
+    }
+    public void LoadScene(int index)
+    {
+        UnityEngine.SceneManagement.SceneManager.LoadScene(index);
+        PhotonNetwork.Disconnect();
+        PhotonNetwork.Reconnect();
     }
     void SetPlayer()
     {
